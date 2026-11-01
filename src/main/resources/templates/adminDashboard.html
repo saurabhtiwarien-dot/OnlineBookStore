@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard - Online Book Store</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at top left, rgba(88, 86, 214, 0.25), transparent 35%),
+                radial-gradient(circle at bottom right, rgba(0, 212, 255, 0.18), transparent 35%),
+                linear-gradient(135deg, #0f172a, #111827 50%, #0b1120);
+            color: white;
+        }
+
+        /* Navbar */
+
+        .navbar {
+            width: 100%;
+            padding: 18px 45px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(18px);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            padding: 9px 15px;
+            border-radius: 10px;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateY(-2px);
+        }
+
+        .logout-btn {
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+        }
+
+        .logout-btn:hover {
+            box-shadow: 0 8px 20px rgba(255,65,108,0.3);
+        }
+
+        /* Main */
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 50px auto;
+        }
+
+        .welcome {
+            text-align: center;
+            margin-bottom: 45px;
+        }
+
+        .welcome h1 {
+            font-size: 38px;
+            margin-bottom: 10px;
+        }
+
+        .welcome p {
+            color: #cbd5e1;
+            font-size: 16px;
+        }
+
+        .admin-badge {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 7px 18px;
+            border-radius: 25px;
+            background: rgba(255, 193, 7, 0.15);
+            border: 1px solid rgba(255, 193, 7, 0.35);
+            color: #ffc107;
+            font-weight: 700;
+            font-size: 13px;
+            letter-spacing: 1px;
+        }
+
+        /* Statistics */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            padding: 30px;
+            border-radius: 22px;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.12);
+            backdrop-filter: blur(18px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+            transition: 0.3s;
+            text-align: center;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-7px);
+            box-shadow: 0 20px 45px rgba(0,0,0,0.35);
+        }
+
+        .icon {
+            font-size: 42px;
+            margin-bottom: 15px;
+        }
+
+        .stat-card h2 {
+            font-size: 36px;
+            margin-bottom: 7px;
+        }
+
+        .stat-card p {
+            color: #cbd5e1;
+            font-size: 15px;
+        }
+
+        /* Management */
+
+        .management {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .management-card {
+            padding: 30px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(15px);
+            text-align: center;
+            box-shadow: 0 12px 35px rgba(0,0,0,0.2);
+        }
+
+        .management-card h2 {
+            margin-bottom: 12px;
+        }
+
+        .management-card p {
+            color: #cbd5e1;
+            margin-bottom: 22px;
+            line-height: 1.5;
+        }
+
+        .manage-btn {
+            display: inline-block;
+            padding: 11px 20px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: white;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .manage-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(99,102,241,0.35);
+        }
+
+        /* Responsive */
+
+        @media (max-width: 850px) {
+            .stats,
+            .management {
+                grid-template-columns: 1fr;
+            }
+
+            .navbar {
+                padding: 15px 20px;
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .welcome h1 {
+                font-size: 30px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            📚 Online Book Store
+        </div>
+
+        <ul class="nav-links">
+
+            <li>
+                <a th:href="@{/}">
+                    🏠 Home
+                </a>
+            </li>
+
+            <li>
+                <a th:href="@{/orders}">
+                    📦 Orders
+                </a>
+            </li>
+
+            <li>
+                <a th:href="@{/logout}" class="logout-btn">
+                    🚪 Logout
+                </a>
+            </li>
+
+        </ul>
+
+    </nav>
+
+
+    <!-- Main Dashboard -->
+
+    <div class="container">
+
+        <div class="welcome">
+
+            <h1>
+                👑 Admin Dashboard
+            </h1>
+
+            <p>
+                Welcome, <strong th:text="${admin.name}">Admin</strong>
+            </p>
+
+            <span class="admin-badge">
+                ADMINISTRATOR
+            </span>
+
+        </div>
+
+
+        <!-- Statistics -->
+
+        <div class="stats">
+
+            <div class="stat-card">
+
+                <div class="icon">
+                    📚
+                </div>
+
+                <h2 th:text="${totalBooks}">
+                    0
+                </h2>
+
+                <p>
+                    Total Books
+                </p>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="icon">
+                    👥
+                </div>
+
+                <h2 th:text="${totalUsers}">
+                    0
+                </h2>
+
+                <p>
+                    Registered Users
+                </p>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="icon">
+                    📦
+                </div>
+
+                <h2 th:text="${totalOrders}">
+                    0
+                </h2>
+
+                <p>
+                    Total Orders
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- Management -->
+
+        <div class="management">
+
+            <div class="management-card">
+
+                <h2>
+                    📚 Books
+                </h2>
+
+                <p>
+                    Manage books available in the online bookstore.
+                </p>
+
+                <a th:href="@{/admin/books}" class="manage-btn">
+				    Manage Books
+				</a>
+
+            </div>
+
+
+            <div class="management-card">
+
+                <h2>
+                    👥 Users
+                </h2>
+
+                <p>
+                    View and manage registered bookstore users.
+                </p>
+
+                <a th:href="@{/admin/users}" class="manage-btn">
+				    Manage Users
+				</a>
+
+            </div>
+
+
+            <div class="management-card">
+
+                <h2>
+                    📦 Orders
+                </h2>
+
+                <p>
+                    View and manage customer orders and their status.
+                </p>
+
+                <a th:href="@{/admin/orders}" class="manage-btn">
+				    Manage Orders
+				</a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Sell Your Book | Online Book Store</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+
+    min-height:100vh;
+
+    font-family:'Poppins',sans-serif;
+
+    color:white;
+
+    background:
+        radial-gradient(circle at 10% 20%,#243b80,transparent 30%),
+        radial-gradient(circle at 90% 80%,#652f87,transparent 30%),
+        linear-gradient(135deg,#080b16,#111936,#090d19);
+
+}
+
+
+/* =========================
+   NAVBAR
+========================= */
+
+.navbar{
+
+    width:92%;
+
+    max-width:1300px;
+
+    margin:20px auto;
+
+    padding:15px 25px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    background:rgba(255,255,255,.08);
+
+    border:1px solid rgba(255,255,255,.12);
+
+    backdrop-filter:blur(20px);
+
+    border-radius:20px;
+
+}
+
+.logo{
+
+    font-size:24px;
+
+    font-weight:700;
+
+    background:linear-gradient(
+        90deg,
+        #00e5ff,
+        #8e2de2
+    );
+
+    -webkit-background-clip:text;
+
+    -webkit-text-fill-color:transparent;
+
+}
+
+.nav-links{
+
+    display:flex;
+
+    gap:10px;
+
+}
+
+.nav-links a{
+
+    text-decoration:none;
+
+    color:#ddd;
+
+    padding:9px 15px;
+
+    border-radius:10px;
+
+    transition:.3s;
+
+}
+
+.nav-links a:hover{
+
+    background:rgba(255,255,255,.12);
+
+    color:white;
+
+}
+
+
+/* =========================
+   PAGE
+========================= */
+
+.container{
+
+    width:92%;
+
+    max-width:900px;
+
+    margin:60px auto;
+
+}
+
+
+/* =========================
+   TITLE
+========================= */
+
+.page-title{
+
+    text-align:center;
+
+    margin-bottom:35px;
+
+}
+
+.page-title .icon{
+
+    font-size:55px;
+
+    animation:float 3s ease-in-out infinite;
+
+}
+
+.page-title h1{
+
+    font-size:40px;
+
+    margin-top:10px;
+
+}
+
+.page-title p{
+
+    color:#aeb5c5;
+
+    margin-top:8px;
+
+}
+
+@keyframes float{
+
+    0%,100%{
+
+        transform:translateY(0);
+
+    }
+
+    50%{
+
+        transform:translateY(-10px);
+
+    }
+
+}
+
+
+/* =========================
+   FORM CARD
+========================= */
+
+.form-card{
+
+    padding:40px;
+
+    background:rgba(255,255,255,.08);
+
+    border:1px solid rgba(255,255,255,.12);
+
+    border-radius:25px;
+
+    backdrop-filter:blur(25px);
+
+    box-shadow:
+
+        0 25px 60px rgba(0,0,0,.35);
+
+}
+
+
+/* =========================
+   FORM
+========================= */
+
+.form-group{
+
+    margin-bottom:22px;
+
+}
+
+.form-group label{
+
+    display:block;
+
+    margin-bottom:8px;
+
+    font-weight:500;
+
+}
+
+.form-group label span{
+
+    color:#00e5ff;
+
+}
+
+input{
+
+    width:100%;
+
+    padding:14px 16px;
+
+    border-radius:12px;
+
+    border:1px solid rgba(255,255,255,.15);
+
+    background:rgba(0,0,0,.2);
+
+    color:white;
+
+    font-size:15px;
+
+    outline:none;
+
+    transition:.3s;
+
+}
+
+select{
+
+    width:100%;
+
+    padding:14px 16px;
+
+    border-radius:12px;
+
+    border:1px solid rgba(255,255,255,.15);
+
+    background:rgba(0,0,0,.2);
+
+    color:white;
+
+    font-size:15px;
+
+    outline:none;
+
+    transition:.3s;
+
+    cursor:pointer;
+
+}
+
+select:focus{
+
+    border-color:#00e5ff;
+
+    box-shadow:
+        0 0 0 3px rgba(0,229,255,.1),
+        0 0 20px rgba(0,229,255,.1);
+
+    transform:translateY(-2px);
+
+}
+
+select option{
+
+    background:#111936;
+
+    color:white;
+
+}
+
+input:focus{
+
+    border-color:#00e5ff;
+
+    box-shadow:
+
+        0 0 0 3px rgba(0,229,255,.1),
+
+        0 0 20px rgba(0,229,255,.1);
+
+    transform:translateY(-2px);
+
+}
+
+input::placeholder{
+
+    color:#7f8799;
+
+}
+
+
+/* =========================
+   TWO COLUMNS
+========================= */
+
+.row{
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:20px;
+
+}
+
+
+/* =========================
+   BUTTONS
+========================= */
+
+.buttons{
+
+    display:flex;
+
+    gap:15px;
+
+    margin-top:30px;
+
+}
+
+button,
+.back-btn{
+
+    border:none;
+
+    padding:14px 25px;
+
+    border-radius:13px;
+
+    font-family:'Poppins',sans-serif;
+
+    font-weight:600;
+
+    font-size:15px;
+
+    cursor:pointer;
+
+    text-decoration:none;
+
+    transition:.4s;
+
+}
+
+.save-btn{
+
+    color:white;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            #00bcd4,
+            #673ab7
+        );
+
+    flex:1;
+
+}
+
+.back-btn{
+
+    color:white;
+
+    background:rgba(255,255,255,.08);
+
+    border:1px solid rgba(255,255,255,.15);
+
+}
+
+button:hover,
+.back-btn:hover{
+
+    transform:translateY(-5px);
+
+    box-shadow:
+
+        0 15px 35px rgba(0,0,0,.35);
+
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+footer{
+
+    text-align:center;
+
+    margin-top:80px;
+
+    padding:30px;
+
+    color:#8f96a8;
+
+    border-top:1px solid rgba(255,255,255,.08);
+
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:700px){
+
+    .nav-links{
+
+        display:none;
+
+    }
+
+    .form-card{
+
+        padding:25px;
+
+    }
+
+    .row{
+
+        grid-template-columns:1fr;
+
+        gap:0;
+
+    }
+
+    .page-title h1{
+
+        font-size:30px;
+
+    }
+
+    .buttons{
+
+        flex-direction:column;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     NAVBAR
+========================= -->
+
+<nav class="navbar">
+
+    <div class="logo">
+
+        📚 Online Book Store
+
+    </div>
+
+
+    <div class="nav-links">
+
+        <a th:href="@{/}">
+            🏠 Home
+        </a>
+
+        <a th:href="@{/orders}">
+            🛒 Orders
+        </a>
+
+    </div>
+
+</nav>
+
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<div class="container">
+
+
+    <div class="page-title">
+
+        <div class="icon">
+		    🏷️
+		</div>
+
+        <h1>
+		    Sell Your Book
+		</h1>
+		
+		<p>
+		    List your book and make it available to readers
+		</p>
+
+    </div>
+
+
+    <!-- FORM -->
+
+    <div class="form-card">
+
+
+        <form
+            th:action="@{/save}"
+            th:object="${book}"
+            method="post">
+
+
+            <!-- TITLE -->
+
+            <div class="form-group">
+
+                <label>
+                    Book Title <span>*</span>
+                </label>
+
+                <input
+                    type="text"
+                    th:field="*{title}"
+                    placeholder="Enter book title"
+                    required>
+
+            </div>
+
+
+            <!-- AUTHOR -->
+
+            <div class="form-group">
+
+                <label>
+                    Author <span>*</span>
+                </label>
+
+                <input
+                    type="text"
+                    th:field="*{author}"
+                    placeholder="Enter author name"
+                    required>
+
+            </div>
+
+
+            <!-- PRICE + QUANTITY -->
+
+            <div class="row">
+
+
+                <div class="form-group">
+
+                    <label>
+                        Price (₹) <span>*</span>
+                    </label>
+
+                    <input
+                        type="number"
+                        th:field="*{price}"
+                        placeholder="Enter price"
+                        min="0"
+                        step="0.01"
+                        required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Quantity <span>*</span>
+                    </label>
+
+                    <input
+                        type="number"
+                        th:field="*{quantity}"
+                        placeholder="Enter quantity"
+                        min="0"
+                        required>
+
+                </div>
+
+
+            </div>
+
+
+			<!-- CATEGORY -->
+			
+			<div class="form-group">
+			
+			    <label>
+			        Category <span>*</span>
+			    </label>
+			
+			    <select th:field="*{category}" required>
+			
+			        <option value="">Select Category</option>
+			
+			        <option value="Programming">
+			            💻 Programming
+			        </option>
+			
+			        <option value="Fiction">
+			            📖 Fiction
+			        </option>
+			
+			        <option value="Education">
+			            🎓 Education
+			        </option>
+			
+			        <option value="Business">
+			            💼 Business
+			        </option>
+			
+			        <option value="Science">
+			            🔬 Science
+			        </option>
+			
+			        <option value="Biography">
+			            👤 Biography
+			        </option>
+			
+			        <option value="Other">
+			            📚 Other
+			        </option>
+			
+			    </select>
+			
+			</div>
+			
+			
+			<!-- BUTTONS -->
+			
+			<div class="buttons">
+
+                <a
+                    th:href="@{/}"
+                    class="back-btn">
+
+                    ← Back
+
+                </a>
+
+
+                <button
+				    type="submit"
+				    class="save-btn">
+				
+				    🏷️ List Book for Sale
+				
+				</button>
+
+            </div>
+
+
+        </form>
+
+
+    </div>
+
+
+</div>
+
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer>
+
+    📚 Online Book Store
+
+    <br><br>
+
+    Buy • Sell • Discover • Read
+
+</footer>
+
+
+</body>
+
+</html>

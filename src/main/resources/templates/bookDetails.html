@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Book Details - Online Book Store</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            color: white;
+
+            background:
+                radial-gradient(circle at 15% 25%, #263f91 0%, transparent 30%),
+                radial-gradient(circle at 85% 65%, #52206e 0%, transparent 35%),
+                #080f27;
+
+            overflow-x: hidden;
+        }
+
+        /* Floating background circles */
+
+        body::before {
+            content: "";
+            position: fixed;
+            width: 170px;
+            height: 170px;
+            border-radius: 50%;
+
+            background: rgba(0, 229, 255, 0.20);
+
+            top: 18%;
+            left: 7%;
+
+            filter: blur(3px);
+
+            z-index: -1;
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+
+            background: rgba(190, 50, 255, 0.18);
+
+            right: 7%;
+            bottom: 10%;
+
+            filter: blur(5px);
+
+            z-index: -1;
+        }
+
+        /* Navbar */
+
+        .navbar {
+            width: 85%;
+            margin: 25px auto;
+
+            padding: 18px 28px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            border-radius: 22px;
+
+            background: rgba(255, 255, 255, 0.08);
+
+            border: 1px solid rgba(255, 255, 255, 0.15);
+
+            backdrop-filter: blur(20px);
+
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.25);
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: 800;
+
+            background: linear-gradient(
+                90deg,
+                #00e5ff,
+                #667eea,
+                #a855f7
+            );
+
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 35px;
+        }
+
+        .nav-links a {
+            color: #ddd;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #00e5ff;
+        }
+
+        /* Main */
+
+        .container {
+            width: 85%;
+            max-width: 1100px;
+
+            margin: 70px auto;
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .page-title h1 {
+            font-size: 42px;
+            font-weight: 800;
+
+            background: linear-gradient(
+                90deg,
+                #ffffff,
+                #00e5ff,
+                #a855f7
+            );
+
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .page-title p {
+            color: #aeb8d0;
+            margin-top: 8px;
+        }
+
+        /* Details Card */
+
+        .details-card {
+            display: grid;
+            grid-template-columns: 40% 60%;
+
+            background: rgba(255, 255, 255, 0.08);
+
+            border: 1px solid rgba(255, 255, 255, 0.15);
+
+            backdrop-filter: blur(20px);
+
+            border-radius: 28px;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 25px 70px rgba(0, 0, 0, 0.35);
+
+            animation: appear 0.7s ease;
+        }
+
+        @keyframes appear {
+
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Book Cover */
+
+        .book-cover {
+            min-height: 500px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #2537a5,
+                    #7024a7
+                );
+
+            position: relative;
+        }
+
+        .book-cover::before {
+            content: "";
+
+            position: absolute;
+
+            width: 280px;
+            height: 380px;
+
+            border-radius: 12px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #12c2e9,
+                    #5b3cc4,
+                    #c026d3
+                );
+
+            transform: rotate(-5deg);
+
+            box-shadow:
+                0 25px 50px rgba(0, 0, 0, 0.35);
+        }
+
+        .book-icon {
+            position: relative;
+            z-index: 2;
+
+            font-size: 90px;
+
+            filter:
+                drop-shadow(
+                    0 10px 15px rgba(0,0,0,0.3)
+                );
+        }
+
+        /* Information */
+
+        .book-info {
+            padding: 50px;
+        }
+
+        .book-info h2 {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .author {
+            color: #aeb8d0;
+            font-size: 17px;
+            margin-bottom: 20px;
+        }
+
+        .category {
+            display: inline-block;
+
+            padding: 7px 15px;
+
+            border-radius: 20px;
+
+            color: #00e5ff;
+
+            background: rgba(0, 229, 255, 0.10);
+
+            border: 1px solid rgba(0, 229, 255, 0.20);
+
+            font-size: 13px;
+            font-weight: 600;
+
+            margin-bottom: 30px;
+        }
+
+        .price {
+            font-size: 36px;
+            font-weight: 800;
+
+            color: #00e5ff;
+
+            margin-bottom: 12px;
+        }
+
+        .stock {
+            color: #8ee6b0;
+            font-size: 16px;
+
+            margin-bottom: 35px;
+        }
+
+        /* Information rows */
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+
+            padding: 14px 0;
+
+            border-bottom:
+                1px solid rgba(255,255,255,0.10);
+        }
+
+        .info-label {
+            color: #9faac4;
+        }
+
+        .info-value {
+            font-weight: 600;
+        }
+
+        /* Buttons */
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+
+            margin-top: 35px;
+        }
+
+        .btn {
+            display: inline-block;
+
+            padding: 13px 22px;
+
+            border-radius: 12px;
+
+            text-decoration: none;
+
+            font-weight: 600;
+
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+        }
+
+        .buy-btn {
+            background: linear-gradient(
+                135deg,
+                #00c853,
+                #00a844
+            );
+
+            color: white;
+
+            box-shadow:
+                0 8px 25px rgba(0, 200, 83, 0.25);
+        }
+
+        .back-btn {
+            background: rgba(255,255,255,0.08);
+
+            border:
+                1px solid rgba(255,255,255,0.15);
+
+            color: white;
+        }
+
+        .back-btn:hover {
+            border-color: #00e5ff;
+            color: #00e5ff;
+        }
+
+        /* Footer */
+
+        footer {
+            margin-top: 100px;
+
+            padding: 40px;
+
+            text-align: center;
+
+            border-top:
+                1px solid rgba(255,255,255,0.08);
+
+            color: #8d98b2;
+        }
+
+        footer h3 {
+            color: white;
+            margin-bottom: 8px;
+        }
+
+        /* Responsive */
+
+        @media (max-width: 800px) {
+
+            .navbar {
+                width: 92%;
+            }
+
+            .nav-links {
+                gap: 15px;
+            }
+
+            .details-card {
+                grid-template-columns: 1fr;
+            }
+
+            .book-cover {
+                min-height: 350px;
+            }
+
+            .book-info {
+                padding: 30px;
+            }
+
+            .page-title h1 {
+                font-size: 32px;
+            }
+
+        }
+
+        @media (max-width: 500px) {
+
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .buttons {
+                flex-direction: column;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <!-- Navbar -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            📚 Online Book Store
+        </div>
+
+        <div class="nav-links">
+
+            <a href="/">
+                Home
+            </a>
+
+            <a href="/add">
+                Add Book
+            </a>
+
+            <a href="/orders">
+                Orders
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- Main Content -->
+
+    <main class="container">
+
+        <div class="page-title">
+
+            <h1>Book Details 📖</h1>
+
+            <p>
+                Explore complete information about this book.
+            </p>
+
+        </div>
+
+
+        <!-- Book Details -->
+
+        <div class="details-card">
+
+            <!-- Book Cover -->
+
+            <div class="book-cover">
+
+                <div class="book-icon">
+                    📖
+                </div>
+
+            </div>
+
+
+            <!-- Book Information -->
+
+            <div class="book-info">
+
+                <h2 th:text="${book.title}">
+                    Book Title
+                </h2>
+
+                <div
+                    class="author"
+                    th:text="'by ' + ${book.author}">
+                    by Author
+                </div>
+
+                <div
+                    class="category"
+                    th:text="${book.category != null and book.category != '' ? book.category : 'Uncategorized'}">
+                    Uncategorized
+                </div>
+
+                <div
+                    class="price"
+                    th:text="'₹' + ${book.price}">
+                    ₹0
+                </div>
+
+                <div
+                    class="stock"
+                    th:text="'✓ Available Stock: ' + ${book.quantity}">
+                    ✓ Available Stock: 0
+                </div>
+
+
+                <div class="info-row">
+
+                    <span class="info-label">
+                        Book ID
+                    </span>
+
+                    <span
+                        class="info-value"
+                        th:text="${book.id}">
+                        1
+                    </span>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <span class="info-label">
+                        Author
+                    </span>
+
+                    <span
+                        class="info-value"
+                        th:text="${book.author}">
+                        Author
+                    </span>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <span class="info-label">
+                        Category
+                    </span>
+
+                    <span
+                        class="info-value"
+                        th:text="${book.category != null and book.category != '' ? book.category : 'Uncategorized'}">
+                        Uncategorized
+                    </span>
+
+                </div>
+
+
+                <div class="buttons">
+
+                    <a
+                        th:href="@{/buy/{id}(id=${book.id})}"
+                        class="btn buy-btn">
+                        🛒 Buy Now
+                    </a>
+
+                    <a
+                        href="/"
+                        class="btn back-btn">
+                        ← Back to Books
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <!-- Footer -->
+
+    <footer>
+
+        <h3>
+            📚 Online Book Store
+        </h3>
+
+        <p>
+            Buy • Sell • Discover • Read
+        </p>
+
+        <p style="margin-top:15px;">
+            © 2026 Online Book Store
+        </p>
+
+    </footer>
+
+</body>
+
+</html>

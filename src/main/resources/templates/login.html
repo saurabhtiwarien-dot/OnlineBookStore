@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Login - Online Book Store</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+
+            font-family: 'Poppins', sans-serif;
+
+            color: white;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            background:
+                radial-gradient(
+                    circle at 15% 20%,
+                    #263f91 0%,
+                    transparent 30%
+                ),
+                radial-gradient(
+                    circle at 85% 80%,
+                    #52206e 0%,
+                    transparent 35%
+                ),
+                #080f27;
+        }
+
+        .login-card {
+
+            width: 420px;
+            max-width: 90%;
+
+            padding: 45px;
+
+            border-radius: 28px;
+
+            background: rgba(255, 255, 255, 0.08);
+
+            border:
+                1px solid rgba(255, 255, 255, 0.15);
+
+            backdrop-filter: blur(20px);
+
+            box-shadow:
+                0 25px 70px rgba(0, 0, 0, 0.35);
+
+            animation: appear 0.7s ease;
+        }
+
+        @keyframes appear {
+
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            text-align: center;
+
+            font-size: 45px;
+
+            margin-bottom: 5px;
+        }
+
+        h1 {
+            text-align: center;
+
+            font-size: 30px;
+
+            margin-bottom: 8px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #ffffff,
+                    #00e5ff,
+                    #a855f7
+                );
+
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            text-align: center;
+
+            color: #aeb8d0;
+
+            font-size: 14px;
+
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+
+            margin-bottom: 8px;
+
+            color: #d9e0f2;
+
+            font-size: 14px;
+
+            font-weight: 500;
+        }
+
+        input {
+            width: 100%;
+
+            padding: 14px 16px;
+
+            border-radius: 12px;
+
+            border:
+                1px solid rgba(255, 255, 255, 0.15);
+
+            outline: none;
+
+            background:
+                rgba(255, 255, 255, 0.08);
+
+            color: white;
+
+            font-family: 'Poppins', sans-serif;
+
+            transition: 0.3s;
+        }
+
+        input::placeholder {
+            color: #7f8aa5;
+        }
+
+        input:focus {
+
+            border-color: #00e5ff;
+
+            box-shadow:
+                0 0 20px rgba(0, 229, 255, 0.15);
+        }
+
+        .error {
+
+            padding: 12px;
+
+            margin-bottom: 20px;
+
+            border-radius: 10px;
+
+            background:
+                rgba(255, 60, 60, 0.12);
+
+            border:
+                1px solid rgba(255, 60, 60, 0.25);
+
+            color: #ff8d8d;
+
+            text-align: center;
+
+            font-size: 13px;
+        }
+
+        button {
+
+            width: 100%;
+
+            padding: 14px;
+
+            border: none;
+
+            border-radius: 12px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #00c6ff,
+                    #0072ff
+                );
+
+            color: white;
+
+            font-family: 'Poppins', sans-serif;
+
+            font-size: 15px;
+
+            font-weight: 600;
+
+            cursor: pointer;
+
+            transition: 0.3s;
+
+            box-shadow:
+                0 8px 25px rgba(0, 114, 255, 0.25);
+        }
+
+        button:hover {
+
+            transform: translateY(-3px);
+
+            box-shadow:
+                0 12px 30px rgba(0, 114, 255, 0.35);
+        }
+
+        .register-link {
+
+            text-align: center;
+
+            margin-top: 25px;
+
+            color: #9faac4;
+
+            font-size: 14px;
+        }
+
+        .register-link a {
+
+            color: #00e5ff;
+
+            text-decoration: none;
+
+            font-weight: 600;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+
+        .back {
+
+            display: block;
+
+            text-align: center;
+
+            margin-top: 18px;
+
+            color: #9faac4;
+
+            text-decoration: none;
+
+            font-size: 13px;
+
+            transition: 0.3s;
+        }
+
+        .back:hover {
+            color: white;
+        }
+
+        @media (max-width: 500px) {
+
+            .login-card {
+                padding: 30px 25px;
+            }
+
+            h1 {
+                font-size: 26px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="login-card">
+
+        <div class="logo">
+            📚
+        </div>
+
+        <h1>
+            Welcome Back
+        </h1>
+
+        <p class="subtitle">
+            Login to your Online Book Store account
+        </p>
+
+
+        <!-- Error Message -->
+
+        <div
+            class="error"
+            th:if="${error}"
+            th:text="${error}">
+            Invalid email or password!
+        </div>
+
+
+        <!-- Login Form -->
+
+        <form
+            th:action="@{/login}"
+            method="post">
+
+            <div class="form-group">
+
+                <label>
+                    Email Address
+                </label>
+
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="Enter your email"
+                    required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Password
+                </label>
+
+                <input
+                    type="password"
+                    name="password"
+                    placeholder="Enter your password"
+                    required>
+
+            </div>
+
+
+            <button type="submit">
+                🔐 Login
+            </button>
+
+        </form>
+
+
+        <div class="register-link">
+
+            Don't have an account?
+
+            <a href="/register">
+                Create Account
+            </a>
+
+        </div>
+
+
+        <a
+            href="/"
+            class="back">
+            ← Back to Home
+        </a>
+
+    </div>
+
+</body>
+
+</html>

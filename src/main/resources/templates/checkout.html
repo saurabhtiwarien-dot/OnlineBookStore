@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Checkout | Online Book Store</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            color: white;
+
+            background:
+                radial-gradient(circle at 10% 20%, rgba(0,229,255,.15), transparent 30%),
+                radial-gradient(circle at 90% 80%, rgba(124,77,255,.18), transparent 30%),
+                #080d24;
+        }
+
+        .navbar {
+            width: 92%;
+            max-width: 1300px;
+            margin: 20px auto;
+            padding: 15px 25px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            background: rgba(255,255,255,.08);
+            border: 1px solid rgba(255,255,255,.12);
+
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+
+            box-shadow: 0 15px 40px rgba(0,0,0,.3);
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 12px;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 9px 15px;
+            border-radius: 12px;
+            transition: .3s;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255,255,255,.1);
+        }
+
+        .logout-btn {
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+        }
+
+        .container {
+            width: 92%;
+            max-width: 1100px;
+            margin: 50px auto;
+        }
+
+        .title {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .title h1 {
+            font-size: 38px;
+            margin-bottom: 8px;
+        }
+
+        .title p {
+            color: #aeb7d8;
+        }
+
+        .checkout-grid {
+            display: grid;
+            grid-template-columns: 1.3fr .7fr;
+            gap: 25px;
+        }
+
+        .card {
+            padding: 28px;
+
+            background: rgba(255,255,255,.07);
+            border: 1px solid rgba(255,255,255,.12);
+
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+
+            box-shadow: 0 15px 40px rgba(0,0,0,.25);
+        }
+
+        .card h2 {
+            margin-bottom: 22px;
+            font-size: 22px;
+        }
+
+        .user-info {
+            margin-bottom: 25px;
+            padding: 15px;
+
+            background: rgba(0,229,255,.07);
+            border: 1px solid rgba(0,229,255,.15);
+            border-radius: 14px;
+        }
+
+        .user-info p {
+            color: #aeb7d8;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 13px 15px;
+
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,.15);
+
+            background: rgba(255,255,255,.08);
+            color: white;
+
+            font-family: 'Poppins', sans-serif;
+            outline: none;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            border-color: #00e5ff;
+            box-shadow: 0 0 18px rgba(0,229,255,.15);
+        }
+
+        .form-group select option {
+            background: #111936;
+            color: white;
+        }
+
+        .cart-item {
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255,255,255,.1);
+
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .book-title {
+            font-weight: 500;
+        }
+
+        .book-details {
+            color: #aeb7d8;
+            font-size: 13px;
+            margin-top: 4px;
+        }
+
+        .item-price {
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .total-section {
+            margin-top: 20px;
+            padding-top: 20px;
+
+            border-top: 1px solid rgba(255,255,255,.15);
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .total-section span {
+            color: #00e5ff;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .place-order {
+            width: 100%;
+            margin-top: 25px;
+            padding: 14px;
+
+            border: none;
+            border-radius: 13px;
+
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+
+            cursor: pointer;
+            transition: .3s;
+        }
+
+        .place-order:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,114,255,.3);
+        }
+
+        .back-cart {
+            display: inline-block;
+            margin-top: 18px;
+
+            color: #aeb7d8;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .back-cart:hover {
+            color: #00e5ff;
+        }
+
+        .empty-message {
+            text-align: center;
+            padding: 40px;
+        }
+
+        @media (max-width: 800px) {
+
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .checkout-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<nav class="navbar">
+
+    <div class="logo">
+        📚 Online Book Store
+    </div>
+
+    <ul class="nav-links">
+
+        <li>
+            <a th:href="@{/}">Home</a>
+        </li>
+
+        <li>
+            <a th:href="@{/cart}">🛒 Cart</a>
+        </li>
+
+        <li>
+            <a th:href="@{/orders}">Orders</a>
+        </li>
+
+        <li>
+            <a th:href="@{/logout}" class="logout-btn">
+                🚪 Logout
+            </a>
+        </li>
+
+    </ul>
+
+</nav>
+
+
+<div class="container">
+
+    <div class="title">
+
+        <h1>💳 Checkout</h1>
+
+        <p>
+            Complete your details and place your order.
+        </p>
+
+    </div>
+
+
+    <div class="checkout-grid">
+
+
+        <!-- CUSTOMER DETAILS -->
+
+        <div class="card">
+
+            <h2>📦 Delivery Details</h2>
+
+
+            <div class="user-info">
+
+                <strong>
+                    👤
+                    <span th:text="${user.name}">
+                        User Name
+                    </span>
+                </strong>
+
+                <p th:text="${user.email}">
+                    user@email.com
+                </p>
+
+            </div>
+
+
+            <form id="checkoutForm"
+			      th:action="@{/place-order}"
+			      method="post"
+			      th:attr="data-razorpay-key=${razorpayKeyId},
+			               data-user-name=${user.name},
+			               data-user-email=${user.email}">
+
+
+                <div class="form-group">
+
+                    <label>
+                        📱 Phone Number
+                    </label>
+
+                    <input
+                        type="tel"
+                        name="phone"
+                        placeholder="Enter your phone number"
+                        required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        🏠 Delivery Address
+                    </label>
+
+                    <textarea
+                        name="address"
+                        placeholder="Enter your complete delivery address"
+                        required></textarea>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        💰 Payment Method
+                    </label>
+
+                    <select name="paymentMethod" required>
+
+                        <option value="">
+                            Select Payment Method
+                        </option>
+
+                        <option value="Cash on Delivery">
+                            💵 Cash on Delivery
+                        </option>
+
+                        <option value="Online Payment">
+                            💳 Online Payment
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="place-order">
+
+                    ✅ Place Order
+
+                </button>
+
+
+            </form>
+
+
+            <a
+                th:href="@{/cart}"
+                class="back-cart">
+
+                ← Back to Cart
+
+            </a>
+
+        </div>
+
+
+
+        <!-- ORDER SUMMARY -->
+
+        <div class="card">
+
+            <h2>🛒 Order Summary</h2>
+
+
+            <div
+                th:if="${#lists.isEmpty(cartItems)}"
+                class="empty-message">
+
+                <p>
+                    Your cart is empty.
+                </p>
+
+            </div>
+
+
+            <div
+                th:each="item : ${cartItems}"
+                class="cart-item">
+
+                <div>
+
+                    <div
+                        class="book-title"
+                        th:text="${item.bookTitle}">
+
+                        Book Title
+
+                    </div>
+
+                    <div class="book-details">
+
+                        ₹<span th:text="${item.price}">
+                            0
+                        </span>
+
+                        ×
+
+                        <span th:text="${item.quantity}">
+                            1
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="item-price">
+
+                    ₹<span
+                        th:text="${item.price * item.quantity}">
+
+                        0
+
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="total-section"
+                th:if="${not #lists.isEmpty(cartItems)}">
+
+                <strong>
+                    Total
+                </strong>
+
+                <span id="checkoutTotal">
+                    ₹0
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Razorpay Checkout -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+
+    // Calculate checkout total
+    function calculateCheckoutTotal() {
+
+        let total = 0;
+
+        document
+            .querySelectorAll(".item-price span")
+            .forEach(function(item) {
+
+                total += parseFloat(item.innerText) || 0;
+
+            });
+
+        document.getElementById("checkoutTotal")
+            .innerText = "₹" + total.toFixed(2);
+    }
+
+    calculateCheckoutTotal();
+
+
+    // Checkout form
+    const checkoutForm =
+        document.getElementById("checkoutForm");
+
+
+    checkoutForm.addEventListener(
+        "submit",
+        async function(event) {
+
+            const paymentMethod =
+                document.querySelector(
+                    'select[name="paymentMethod"]'
+                ).value;
+
+
+            // Cash on Delivery
+            // Use the existing normal order process
+            if (paymentMethod !== "Online Payment") {
+                return;
+            }
+
+
+            // Online Payment
+            // Stop normal form submission
+            event.preventDefault();
+
+
+            try {
+
+                // Create Razorpay order
+                const response = await fetch(
+                    "/create-payment-order",
+                    {
+                        method: "POST"
+                    }
+                );
+
+
+                const data = await response.json();
+
+
+                if (!data.success) {
+
+                    alert(data.message);
+                    return;
+                }
+
+
+                // Razorpay Checkout
+                const options = {
+
+                	key: checkoutForm.dataset.razorpayKey,
+
+                    amount: data.amount,
+
+                    currency: data.currency,
+
+                    name: "Online Book Store",
+
+                    description: "Book Purchase",
+
+                    order_id: data.orderId,
+
+
+                    prefill: {
+                        name: checkoutForm.dataset.userName,
+                        email: checkoutForm.dataset.userEmail
+                    },
+
+
+                    theme: {
+                        color: "#00c6ff"
+                    },
+
+
+                    // Payment successful
+                    handler: async function(paymentResponse) {
+
+                        const formData =
+                            new FormData(checkoutForm);
+
+
+                        formData.append(
+                            "razorpay_payment_id",
+                            paymentResponse.razorpay_payment_id
+                        );
+
+
+                        formData.append(
+                            "razorpay_order_id",
+                            paymentResponse.razorpay_order_id
+                        );
+
+
+                        formData.append(
+                            "razorpay_signature",
+                            paymentResponse.razorpay_signature
+                        );
+
+
+                        // Verify payment on server
+                        const verifyResponse =
+                            await fetch(
+                                "/verify-payment",
+                                {
+                                    method: "POST",
+                                    body: formData
+                                }
+                            );
+
+
+                        const result =
+                            await verifyResponse.json();
+
+
+                        if (result.success) {
+
+                            window.location.href =
+                                "/orders";
+
+                        } else {
+
+                            alert(
+                                result.message ||
+                                "Payment verification failed."
+                            );
+                        }
+
+                    },
+
+
+                    // Razorpay popup closed
+                    modal: {
+
+                        ondismiss: function() {
+
+                            console.log(
+                                "Razorpay Checkout closed."
+                            );
+
+                        }
+
+                    }
+
+                };
+
+
+                // Open Razorpay popup
+                const razorpay =
+                    new Razorpay(options);
+
+                razorpay.open();
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                alert(
+                    "Something went wrong while starting the payment."
+                );
+            }
+
+        }
+    );
+
+</script>
+
+
+
+</body>
+
+</html>

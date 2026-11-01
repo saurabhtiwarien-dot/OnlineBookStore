@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Order Details | Online Book Store</title>
+
+<style>
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+
+    font-family: "Segoe UI", Arial, sans-serif;
+
+    min-height: 100vh;
+
+    color: #fff;
+
+    background:
+        radial-gradient(
+            circle at 10% 20%,
+            rgba(120, 80, 255, 0.35),
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at 90% 80%,
+            rgba(0, 200, 255, 0.25),
+            transparent 35%
+        ),
+        linear-gradient(
+            135deg,
+            #080b16,
+            #11162b,
+            #080b16
+        );
+
+    overflow-x: hidden;
+}
+
+
+/* Navbar */
+
+.navbar {
+
+    width: 100%;
+
+    padding: 18px 7%;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    background: rgba(15, 18, 35, 0.65);
+
+    backdrop-filter: blur(18px);
+
+    border-bottom:
+        1px solid rgba(255, 255, 255, 0.1);
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 10;
+}
+
+.logo {
+
+    font-size: 24px;
+
+    font-weight: 700;
+
+    letter-spacing: 1px;
+}
+
+.logo span {
+    color: #8c6cff;
+}
+
+.nav-links {
+
+    display: flex;
+
+    gap: 25px;
+}
+
+.nav-links a {
+
+    color: #ddd;
+
+    text-decoration: none;
+
+    transition: 0.3s;
+
+    font-size: 15px;
+}
+
+.nav-links a:hover {
+    color: #9c7cff;
+}
+
+
+/* Main */
+
+.container {
+
+    width: 90%;
+
+    max-width: 850px;
+
+    margin: 55px auto;
+}
+
+
+/* Heading */
+
+.heading {
+
+    text-align: center;
+
+    margin-bottom: 35px;
+}
+
+.heading .icon {
+
+    font-size: 55px;
+
+    margin-bottom: 10px;
+}
+
+.heading h1 {
+
+    font-size: 40px;
+
+    margin-bottom: 10px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #ffffff,
+            #9f8cff
+        );
+
+    -webkit-background-clip: text;
+
+    -webkit-text-fill-color: transparent;
+}
+
+.heading p {
+
+    color: #aaa;
+
+    font-size: 16px;
+}
+
+
+/* Order Card */
+
+.order-card {
+
+    background: rgba(255, 255, 255, 0.06);
+
+    border:
+        1px solid rgba(255, 255, 255, 0.12);
+
+    border-radius: 24px;
+
+    padding: 35px;
+
+    box-shadow:
+        0 25px 70px rgba(0, 0, 0, 0.35),
+        inset 0 1px rgba(255, 255, 255, 0.08);
+
+    backdrop-filter: blur(20px);
+}
+
+
+/* Order ID */
+
+.order-id {
+
+    display: inline-block;
+
+    padding: 8px 16px;
+
+    border-radius: 20px;
+
+    background:
+        rgba(140, 108, 255, 0.15);
+
+    border:
+        1px solid rgba(140, 108, 255, 0.3);
+
+    color: #bcaeff;
+
+    font-weight: 700;
+
+    margin-bottom: 25px;
+}
+
+
+/* Order Status */
+
+.status-badge {
+    display: inline-block;
+    padding: 7px 14px;
+    border-radius: 20px;
+    background: rgba(255, 193, 7, 0.15);
+    border: 1px solid rgba(255, 193, 7, 0.3);
+    color: #ffc107;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+
+/* Section */
+
+.section {
+
+    margin-bottom: 30px;
+}
+
+.section-title {
+
+    font-size: 20px;
+
+    margin-bottom: 15px;
+
+    color: #fff;
+
+    border-left:
+        4px solid #8c6cff;
+
+    padding-left: 12px;
+}
+
+
+/* Details */
+
+.details {
+
+    background: rgba(0, 0, 0, 0.18);
+
+    border-radius: 16px;
+
+    padding: 10px 20px;
+}
+
+.row {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+    gap: 25px;
+
+    padding: 15px 0;
+
+    border-bottom:
+        1px solid rgba(255, 255, 255, 0.07);
+}
+
+.row:last-child {
+    border-bottom: none;
+}
+
+.label {
+
+    color: #999;
+
+    font-size: 14px;
+}
+
+.value {
+
+    color: #fff;
+
+    font-weight: 600;
+
+    text-align: right;
+
+    max-width: 60%;
+
+    word-break: break-word;
+}
+
+
+/* Price */
+
+.total-row {
+
+    margin-top: 10px;
+
+    padding-top: 20px;
+
+    border-top:
+        1px solid rgba(255, 255, 255, 0.12);
+}
+
+.total {
+
+    color: #6ee7b7;
+
+    font-size: 24px;
+
+    font-weight: 700;
+}
+
+
+/* Buttons */
+
+.buttons {
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 15px;
+
+    flex-wrap: wrap;
+
+    margin-top: 30px;
+}
+
+.btn {
+
+    display: inline-block;
+
+    padding: 13px 24px;
+
+    border-radius: 11px;
+
+    text-decoration: none;
+
+    color: #fff;
+
+    font-weight: 600;
+
+    transition: 0.3s;
+}
+
+.btn:hover {
+
+    transform: translateY(-3px);
+}
+
+.back-btn {
+
+    background:
+        rgba(255, 255, 255, 0.08);
+
+    border:
+        1px solid rgba(255, 255, 255, 0.15);
+}
+
+.home-btn {
+
+    background:
+        linear-gradient(
+            135deg,
+            #7658ff,
+            #a27dff
+        );
+
+    box-shadow:
+        0 8px 25px rgba(120, 80, 255, 0.3);
+}
+
+
+/* Footer */
+
+footer {
+
+    text-align: center;
+
+    margin: 50px 0 25px;
+
+    color: #666;
+
+    font-size: 13px;
+}
+
+
+/* Mobile */
+
+@media (max-width: 650px) {
+
+    .navbar {
+
+        padding: 15px 5%;
+
+        flex-direction: column;
+
+        gap: 15px;
+    }
+
+    .nav-links {
+
+        gap: 15px;
+
+        flex-wrap: wrap;
+
+        justify-content: center;
+    }
+
+    .container {
+
+        width: 94%;
+
+        margin-top: 35px;
+    }
+
+    .heading h1 {
+
+        font-size: 31px;
+    }
+
+    .order-card {
+
+        padding: 22px 18px;
+    }
+
+    .row {
+
+        flex-direction: column;
+
+        gap: 7px;
+    }
+
+    .value {
+
+        max-width: 100%;
+
+        text-align: left;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- Navbar -->
+
+<nav class="navbar">
+
+    <div class="logo">
+
+        📚 <span>BookStore</span>
+
+    </div>
+
+
+    <div class="nav-links">
+
+        <a th:href="@{/}">
+            🏠 Home
+        </a>
+
+        <a th:href="@{/orders}">
+            📦 Orders
+        </a>
+
+        <a th:href="@{/cart}">
+            🛒 Cart
+        </a>
+
+        <a th:href="@{/logout}">
+            🚪 Logout
+        </a>
+
+    </div>
+
+</nav>
+
+
+
+<!-- Main -->
+
+<div class="container">
+
+
+    <div class="heading">
+
+        <div class="icon">
+            📦
+        </div>
+
+        <h1>
+            Order Details
+        </h1>
+
+        <p>
+            Complete information about your order
+        </p>
+
+    </div>
+
+
+
+    <div class="order-card">
+
+
+        <!-- Order ID -->
+
+        <div class="order-id">
+
+            Order ID:
+            <span th:text="'#' + ${order.id}">
+                #1
+            </span>
+
+        </div>
+        
+        <div class="details" style="margin-bottom: 30px;">
+
+		    <div class="row">
+		
+		        <span class="label">
+		            Order Status
+		        </span>
+		
+		        <span class="value">
+		            <span class="status-badge"
+		                  th:text="${order.status}">
+		                PLACED
+		            </span>
+		        </span>
+		
+		    </div>
+		
+		</div>
+
+
+
+        <!-- Customer Information -->
+
+        <div class="section">
+
+            <h2 class="section-title">
+                👤 Customer Information
+            </h2>
+
+
+            <div class="details">
+
+
+                <div class="row">
+
+                    <span class="label">
+                        Name
+                    </span>
+
+                    <span class="value"
+                          th:text="${order.customerName}">
+                        Customer
+                    </span>
+
+                </div>
+
+
+                <div class="row">
+
+                    <span class="label">
+                        Email
+                    </span>
+
+                    <span class="value"
+                          th:text="${order.customerEmail}">
+                        email@example.com
+                    </span>
+
+                </div>
+
+
+                <div class="row">
+
+                    <span class="label">
+                        Phone
+                    </span>
+
+                    <span class="value"
+                          th:text="${order.phone}">
+                        9876543210
+                    </span>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+
+        <!-- Book Information -->
+
+        <div class="section">
+
+            <h2 class="section-title">
+                📚 Book Information
+            </h2>
+
+
+            <div class="details">
+
+
+                <div class="row">
+
+                    <span class="label">
+                        Book
+                    </span>
+
+                    <span class="value"
+                          th:text="${order.bookTitle}">
+                        Book Title
+                    </span>
+
+                </div>
+
+
+                <div class="row">
+
+                    <span class="label">
+                        Quantity
+                    </span>
+
+                    <span class="value"
+                          th:text="${order.quantity}">
+                        1
+                    </span>
+
+                </div>
+
+
+                <div class="row total-row">
+
+                    <span class="label">
+                        Total Price
+                    </span>
+
+                    <span class="value total">
+
+                        ₹
+                        <span th:text="${order.totalPrice}">
+                            0
+                        </span>
+
+                    </span>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+
+        <!-- Delivery Information -->
+
+        <div class="section">
+
+            <h2 class="section-title">
+                🏠 Delivery Information
+            </h2>
+
+
+            <div class="details">
+
+
+                <div class="row">
+
+                    <span class="label">
+                        Address
+                    </span>
+
+                    <span class="value"
+                          th:text="${order.address}">
+                        Delivery Address
+                    </span>
+
+                </div>
+
+
+                <div class="row">
+
+                    <span class="label">
+                        Payment Method
+                    </span>
+
+                    <span class="value"
+                          th:text="${order.paymentMethod}">
+                        Cash on Delivery
+                    </span>
+
+                </div>
+
+
+            </div>
+
+        </div>
+        
+        
+        <!-- Buttons -->
+
+        <div class="buttons">
+
+            <a th:href="@{/orders}"
+               class="btn back-btn">
+
+                ← Back to Orders
+
+            </a>
+
+
+            <a th:href="@{/}"
+               class="btn home-btn">
+
+                🏠 Continue Shopping
+
+            </a>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+
+<!-- Footer -->
+
+<footer>
+
+    © 2026 Online Book Store • Buy • Sell • Discover
+
+</footer>
+
+
+</body>
+
+</html>

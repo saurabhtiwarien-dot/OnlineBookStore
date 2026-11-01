@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Shopping Cart | Online Book Store</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            color: white;
+
+            background:
+                radial-gradient(circle at 10% 20%, rgba(0,229,255,.15), transparent 30%),
+                radial-gradient(circle at 90% 80%, rgba(124,77,255,.18), transparent 30%),
+                #080d24;
+        }
+
+        .navbar {
+            width: 92%;
+            max-width: 1300px;
+            margin: 20px auto;
+            padding: 15px 25px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            background: rgba(255,255,255,.08);
+            border: 1px solid rgba(255,255,255,.12);
+
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+
+            box-shadow: 0 15px 40px rgba(0,0,0,.3);
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 12px;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 9px 15px;
+            border-radius: 12px;
+            transition: .3s;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255,255,255,.1);
+            transform: translateY(-2px);
+        }
+
+        .logout-btn {
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+        }
+
+        .container {
+            width: 92%;
+            max-width: 1200px;
+            margin: 50px auto;
+        }
+
+        .title {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .title h1 {
+            font-size: 38px;
+            margin-bottom: 8px;
+        }
+
+        .title p {
+            color: #aeb7d8;
+        }
+
+        .cart-grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+
+            padding: 25px;
+
+            background: rgba(255,255,255,.07);
+            border: 1px solid rgba(255,255,255,.12);
+
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+
+            box-shadow: 0 15px 35px rgba(0,0,0,.25);
+
+            transition: .3s;
+        }
+
+        .cart-item:hover {
+            transform: translateY(-3px);
+            border-color: rgba(0,229,255,.35);
+        }
+
+        .book-info {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .book-icon {
+            width: 65px;
+            height: 75px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 32px;
+
+            background: rgba(0,229,255,.1);
+            border: 1px solid rgba(0,229,255,.2);
+
+            border-radius: 14px;
+        }
+
+        .book-info h3 {
+            font-size: 19px;
+            margin-bottom: 5px;
+        }
+
+        .book-info p {
+            color: #aeb7d8;
+            font-size: 14px;
+        }
+
+        .quantity {
+            color: #00e5ff;
+            font-weight: 500;
+        }
+
+        .item-total {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .remove-btn {
+            text-decoration: none;
+            color: white;
+
+            padding: 9px 14px;
+            border-radius: 10px;
+
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+
+            transition: .3s;
+        }
+
+        .remove-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255,65,108,.25);
+        }
+
+        .summary {
+            margin-top: 30px;
+            padding: 25px;
+
+            background: rgba(255,255,255,.08);
+            border: 1px solid rgba(255,255,255,.12);
+
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .summary h2 {
+            font-size: 25px;
+        }
+
+        .checkout-btn {
+            text-decoration: none;
+            color: white;
+
+            padding: 13px 25px;
+            border-radius: 13px;
+
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+
+            transition: .3s;
+        }
+
+        .checkout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,114,255,.3);
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 70px 20px;
+
+            background: rgba(255,255,255,.07);
+            border: 1px solid rgba(255,255,255,.12);
+
+            border-radius: 20px;
+        }
+
+        .empty-cart .icon {
+            font-size: 60px;
+            margin-bottom: 15px;
+        }
+
+        .empty-cart h2 {
+            margin-bottom: 10px;
+        }
+
+        .empty-cart p {
+            color: #aeb7d8;
+            margin-bottom: 25px;
+        }
+
+        .shop-btn {
+            display: inline-block;
+
+            text-decoration: none;
+            color: white;
+
+            padding: 12px 22px;
+            border-radius: 12px;
+
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+        }
+
+        @media (max-width: 700px) {
+
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .cart-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .summary {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+<nav class="navbar">
+
+    <div class="logo">
+        📚 Online Book Store
+    </div>
+
+    <ul class="nav-links">
+
+        <li>
+            <a th:href="@{/}">Home</a>
+        </li>
+
+        <li>
+            <a th:href="@{/add}">Add Book</a>
+        </li>
+
+        <li>
+            <a th:href="@{/orders}">Orders</a>
+        </li>
+
+        <li>
+            <a th:href="@{/cart}">🛒 Cart</a>
+        </li>
+
+        <li>
+            <a th:href="@{/logout}" class="logout-btn">
+                🚪 Logout
+            </a>
+        </li>
+
+    </ul>
+
+</nav>
+
+
+<div class="container">
+
+    <div class="title">
+        <h1>🛒 Your Shopping Cart</h1>
+        <p>Review your selected books before checkout.</p>
+    </div>
+
+
+    <!-- Cart Items -->
+
+    <div class="cart-grid" th:if="${not #lists.isEmpty(cartItems)}">
+
+        <div class="cart-item" th:each="item : ${cartItems}">
+
+            <div class="book-info">
+
+                <div class="book-icon">
+                    📖
+                </div>
+
+                <div>
+
+                    <h3 th:text="${item.bookTitle}">
+                        Book Title
+                    </h3>
+
+                    <p>
+                        Price:
+                        ₹<span th:text="${item.price}">0</span>
+                    </p>
+
+                    <p class="quantity">
+                        Quantity:
+                        <span th:text="${item.quantity}">1</span>
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="item-total">
+
+                ₹<span
+                    th:text="${item.price * item.quantity}">
+                    0
+                </span>
+
+            </div>
+
+
+            <a
+                th:href="@{/cart/remove/{id}(id=${item.id})}"
+                class="remove-btn"
+                onclick="return confirm('Remove this book from cart?');">
+
+                🗑 Remove
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- Empty Cart -->
+
+    <div
+        class="empty-cart"
+        th:if="${#lists.isEmpty(cartItems)}">
+
+        <div class="icon">
+            🛒
+        </div>
+
+        <h2>Your Cart is Empty</h2>
+
+        <p>
+            You haven't added any books to your cart yet.
+        </p>
+
+        <a th:href="@{/}" class="shop-btn">
+            📚 Browse Books
+        </a>
+
+    </div>
+
+
+    <!-- Cart Summary -->
+
+    <div
+        class="summary"
+        th:if="${not #lists.isEmpty(cartItems)}">
+
+        <h2>
+            Total:
+            ₹<span id="grandTotal">0</span>
+        </h2>
+
+        <a th:href="@{/checkout}" class="checkout-btn">
+		    💳 Proceed to Checkout
+		</a>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    function calculateTotal() {
+
+        let total = 0;
+
+        document.querySelectorAll(".item-total span")
+            .forEach(function(item) {
+
+                total += parseFloat(item.innerText) || 0;
+
+            });
+
+        document.getElementById("grandTotal")
+            .innerText = total.toFixed(2);
+    }
+
+    calculateTotal();
+
+</script>
+
+</body>
+</html>
